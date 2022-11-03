@@ -1,29 +1,74 @@
-//
-//  GalleryViewController.swift
-//  Gallery
-//
-//  Created by admin on 03/11/2022.
-//
-
 import UIKit
 
 class GalleryViewController: UIViewController {
+    
+    private var isFirstLoad: Bool = true
+    
+    @IBOutlet weak var imageView: UIImageView!
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        if isFirstLoad {
+            initView()
+            isFirstLoad = false
+        }
+    }
+    
+    private func initView() {
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+    }
+    
+    private func setImage(_ image: UIImage, withName name: String? = nil) {
+        imageView.image = image
+        let fileName = name ?? UUID().uuidString
+        let directoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
+        let fileURL = URL(fileURLWithPath: fileName, relativeTo: directoryURL).appendingPathExtension("png")
+        guard let data = image.pngData() else { return }
+        try? data.write(to: fileURL)
+    }
+    
+    private func showPicker(withSourceType sourceType: UIImagePickerController.SourceType) {
+        let pickerController = UIImagePickerController()
+        pickerController.delegate = self
+        pickerController.allowsEditing = false
+        pickerController.mediaTypes = ["public.image"]
+        pickerController.sourceType = sourceType
+        present(pickerController, animated: true)
+    }
+    
+    @IBAction private func onAddImageClick(_ sender: UIButton) {
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        let cameraAction = UIAlertAction(title: "Camera", style: .default) { _ in
+            self.showPicker(withSourceType: .camera)
+        }
+        let libraryAction = UIAlertAction(title: "Photo Library", style: .cancel) { _ in
+            self.showPicker(withSourceType: .photoLibrary)
+        }
+        
+        if UIImagePickerController.isSourceTypeAvailable(.camera) {
+            alert.addAction(cameraAction)
+        }
+        if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
+            alert.addAction(libraryAction)
+        }
+        
+        present(alert, animated: true)
+    }
+}
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+extension GalleryViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+   
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        guard let image = info[.originalImage] as? UIImage else { return }
+        var name: String?
+        if let imageName = info[.imageURL] as? URL {
+            name = imageName.lastPathComponent
+        }
+        setImage(image, withName: name)
+        picker.dismiss(animated: true)
     }
 
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true)
     }
-    */
-
 }
