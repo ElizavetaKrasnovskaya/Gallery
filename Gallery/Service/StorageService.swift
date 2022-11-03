@@ -22,4 +22,17 @@ final class StorageService {
             storage.set(newValue, forKey: UserDefaultsConstants.PIN_CODE_KEY)
         }
     }
+    
+    var imageName: String {
+        get {
+            storage.string(forKey: UserDefaultsConstants.IMAGE_NAME_KEY) ?? ""
+        }
+        set {
+            storage.set(newValue, forKey: UserDefaultsConstants.IMAGE_NAME_KEY)
+        }
+    }
+    
+    func removeObject(forKey: String) {
+        storage.removeObject(forKey: forKey)
+    }
 }
