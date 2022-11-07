@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		843722F8291992EA00846D02 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843722F7291992EA00846D02 /* TableViewController.swift */; };
+		843722FA2919944900846D02 /* CustomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843722F92919944900846D02 /* CustomTableViewCell.swift */; };
 		849B9F322913F9330082D524 /* GalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849B9F302913F9330082D524 /* GalleryViewController.swift */; };
 		849B9F332913F9330082D524 /* GalleryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 849B9F312913F9330082D524 /* GalleryViewController.xib */; };
 		84B947052912E6FD001A8727 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B947042912E6FD001A8727 /* AppDelegate.swift */; };
@@ -20,6 +22,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		843722F7291992EA00846D02 /* TableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
+		843722F92919944900846D02 /* CustomTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CustomTableViewCell.swift; path = ../Resources/CustomTableViewCell.swift; sourceTree = "<group>"; };
 		849B9F302913F9330082D524 /* GalleryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryViewController.swift; sourceTree = "<group>"; };
 		849B9F312913F9330082D524 /* GalleryViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = GalleryViewController.xib; path = ../Controllers/GalleryViewController.xib; sourceTree = "<group>"; };
 		84B947012912E6FD001A8727 /* Gallery.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Gallery.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -106,6 +110,7 @@
 			children = (
 				84B947082912E6FD001A8727 /* PinViewController.swift */,
 				849B9F302913F9330082D524 /* GalleryViewController.swift */,
+				843722F7291992EA00846D02 /* TableViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -115,6 +120,7 @@
 			children = (
 				84B9470A2912E6FD001A8727 /* Main.storyboard */,
 				849B9F312913F9330082D524 /* GalleryViewController.xib */,
+				843722F92919944900846D02 /* CustomTableViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -192,6 +198,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				84B947092912E6FD001A8727 /* PinViewController.swift in Sources */,
+				843722F8291992EA00846D02 /* TableViewController.swift in Sources */,
+				843722FA2919944900846D02 /* CustomTableViewCell.swift in Sources */,
 				84B9471B2912E898001A8727 /* StorageService.swift in Sources */,
 				84B9471E2912E923001A8727 /* UserDefaultsConstants.swift in Sources */,
 				849B9F322913F9330082D524 /* GalleryViewController.swift in Sources */,

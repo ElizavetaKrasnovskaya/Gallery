@@ -91,6 +91,12 @@ class PinViewController: UIViewController {
     private func navigateToGallery() {
         let galleryViewController = GalleryViewController()
         self.navigationController?.pushViewController(galleryViewController, animated: true)
+//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//
+//        guard let tableViewController = storyboard.instantiateViewController(identifier: "TableViewController") as? TableViewController
+//        else { return }
+//
+//        self.navigationController?.pushViewController(tableViewController, animated: false)
     }
     
     private func checkPin() {
