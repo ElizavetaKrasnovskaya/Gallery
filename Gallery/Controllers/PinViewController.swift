@@ -1,11 +1,14 @@
 import UIKit
+import LocalAuthentication
 
 class PinViewController: UIViewController {
     
+    private let isFirstLaunch: Bool = StorageService.shared.isFirstLaunch
     private var isFirstLoad: Bool = true
-    private let isFirstLaunch = StorageService.shared.isFirstLaunch
+    private var enteredPin: String = ""
     
-    @IBOutlet weak var pinTextField: UITextField!
+    @IBOutlet weak var pinTextField: UITextView!
+    @IBOutlet weak var showPinButton: UIButton!
     @IBOutlet private var buttons: [UIButton]!
     
     override func viewWillLayoutSubviews() {
@@ -22,39 +25,63 @@ class PinViewController: UIViewController {
             $0.layer.borderWidth = 1
             $0.layer.borderColor = UIColor.white.cgColor
         }
-        if isFirstLaunch {
-            pinTextField.placeholder = "Create PIN"
+        pinTextField.layer.borderColor = UIColor.white.cgColor
+        pinTextField.layer.borderWidth = 1
+        pinTextField.delegate = self
+        setupPinButton()
+        updateTextField()
+    }
+    
+    private func setupPinButton() {
+        showPinButton.isEnabled = false
+        showPinButton.setImage(UIImage(systemName: "eye"), for: .normal)
+        showPinButton.setImage(UIImage(systemName: "eye.slash"), for: .selected)
+    }
+    
+    private func updateTextField(isNewSymbol: Bool = false) {
+        if isNewSymbol {
+            setTextFieldValue(showLastSymbol: true)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                self.setTextFieldValue()
+            }
         } else {
-            pinTextField.placeholder = "Enter you PIN"
+            setTextFieldValue()
         }
     }
     
-    @IBAction private func onBtnClick(_ sender: UIButton) {
-        let tag = sender.tag
-        switch tag {
-        case 0: onDigitClick(digit: sender.titleLabel?.text ?? "")
-        case 1: onDeleteClick()
-        case 2: onLockClick()
-        default: return
+    private func setTextFieldValue(showLastSymbol: Bool = false) {
+        guard enteredPin.count > 0
+        else {
+            if isFirstLaunch {
+                pinTextField.text = "Create PIN"
+            } else {
+                pinTextField.text = "Enter you PIN"
+            }
+            return
+        }
+        if showLastSymbol {
+            pinTextField.text = String(Array(repeating: "*", count: enteredPin.count - 1)) + String(enteredPin.last ?? Character(""))
+        } else {
+            self.pinTextField.text = String(Array(repeating: "*", count: self.enteredPin.count))
         }
     }
     
     private func onDigitClick(digit: String) {
-        pinTextField.text = (pinTextField.text ?? "") + digit
+        enteredPin += digit
+        updateTextField(isNewSymbol: true)
     }
     
     private func onDeleteClick() {
-        var text: String = pinTextField.text ?? ""
-        if text.isEmpty == false {
-            text.removeLast()
-            pinTextField.text = text
+        if enteredPin.isEmpty == false {
+            enteredPin.removeLast()
+            updateTextField()
         }
     }
     
     private func onLockClick() {
         if isFirstLaunch {
             StorageService.shared.isFirstLaunch = false
-            StorageService.shared.pinCode = pinTextField.text ?? ""
+            StorageService.shared.pinCode = enteredPin
             navigateToGallery()
         } else {
             checkPin()
@@ -67,13 +94,66 @@ class PinViewController: UIViewController {
     }
     
     private func checkPin() {
-        if pinTextField.text == StorageService.shared.pinCode {
+        if enteredPin == StorageService.shared.pinCode {
             navigateToGallery()
         } else {
-            pinTextField.text = ""
+            enteredPin = ""
+            pinTextField.text = "ERROR!"
             pinTextField.layer.borderColor = UIColor.red.cgColor
             pinTextField.layer.borderWidth = 1
         }
+    }
+    
+    @IBAction func onButtonClick(_ sender: UIButton) {
+        let tag = sender.tag
+        switch tag {
+        case 0: onDigitClick(digit: sender.titleLabel?.text ?? "")
+        case 1: onDeleteClick()
+        case 2: onLockClick()
+        default: return
+        }
+    }
+    
+    @IBAction func onShowPinButtonClick(_ sender: UIButton) {
+        pinTextField.isSecureTextEntry.toggle()
+        showPinButton.isSelected = !pinTextField.isSecureTextEntry
+        if !pinTextField.isSecureTextEntry {
+            pinTextField.text = enteredPin
+        } else {
+            setTextFieldValue()
+        }
+    }
+    
+    
+    @IBAction func onFaceIDButtonClick(_ sender: UIButton) {
+        let context = LAContext()
+        var error: NSError? = nil
+        if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
+            let reason = "Identity yourself"
+            context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: reason) { [weak self] success, authenticationError in
+                DispatchQueue.main.async { [weak self] in
+                    guard success, error == nil
+                    else {
+                        self?.enteredPin = ""
+                        self?.updateTextField()
+                        return
+                    }
+                    self?.navigateToGallery()
+                }
+            }
+        }
+    }
+}
+
+extension PinViewController: UITextViewDelegate {
+    
+    func textViewDidChangeSelection(_ textView: UITextView) {
+        
+        showPinButton.isEnabled = pinTextField.text?.count ?? 0 > 0
+        
+//        if pinTextField.text?.count ?? 0 > 4 {
+//            pinTextField.text?.removeLast()
+//        }
     }
 }
 
