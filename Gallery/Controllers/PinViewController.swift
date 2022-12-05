@@ -89,14 +89,8 @@ class PinViewController: UIViewController {
     }
     
     private func navigateToGallery() {
-        let galleryViewController = GalleryViewController()
-        self.navigationController?.pushViewController(galleryViewController, animated: true)
-//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//
-//        guard let tableViewController = storyboard.instantiateViewController(identifier: "TableViewController") as? TableViewController
-//        else { return }
-//
-//        self.navigationController?.pushViewController(tableViewController, animated: false)
+        let imageViewController = ImageViewController()
+        self.navigationController?.pushViewController(imageViewController, animated: true)
     }
     
     private func checkPin() {
@@ -154,12 +148,7 @@ class PinViewController: UIViewController {
 extension PinViewController: UITextViewDelegate {
     
     func textViewDidChangeSelection(_ textView: UITextView) {
-        
         showPinButton.isEnabled = pinTextField.text?.count ?? 0 > 0
-        
-//        if pinTextField.text?.count ?? 0 > 4 {
-//            pinTextField.text?.removeLast()
-//        }
     }
 }
 

@@ -26,7 +26,7 @@ class GalleryViewController: UIViewController {
         deletePreviousImage()
         guard let data = image.pngData() else { return }
         try? data.write(to: fileURL)
-        StorageService.shared.imageName = fileName
+        //StorageService.shared.imageName = fileName
     }
 
     private func showPicker(withSourceType sourceType: UIImagePickerController.SourceType) {
@@ -39,23 +39,23 @@ class GalleryViewController: UIViewController {
     }
     
     private func loadImage() {
-        let fileName = StorageService.shared.imageName
-        
-        let directoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
-        let fileURL = URL(fileURLWithPath: fileName, relativeTo: directoryURL).appendingPathExtension("png")
-        
-        guard let savedData = try? Data(contentsOf: fileURL),
-              let image = UIImage(data: savedData) else { return }
-        imageView.image = image
+    //        let fileName = StorageService.shared.imageName
+    //
+    //        let directoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
+    //        let fileURL = URL(fileURLWithPath: fileName, relativeTo: directoryURL).appendingPathExtension("png")
+    //
+    //        guard let savedData = try? Data(contentsOf: fileURL),
+    //              let image = UIImage(data: savedData) else { return }
+    //        imageView.image = image
     }
 
     private func deletePreviousImage() {
-        let fileName = StorageService.shared.imageName
-        StorageService.shared.removeObject(forKey: UserDefaultsConstants.IMAGE_NAME_KEY)
-        
-        let directoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
-        let fileURL = URL(fileURLWithPath: fileName, relativeTo: directoryURL).appendingPathExtension("png")
-        try? FileManager.default.removeItem(at: fileURL)
+//        let fileName = StorageService.shared.imageName
+//        StorageService.shared.removeObject(forKey: UserDefaultsConstants.IMAGE_NAME_KEY)
+//        
+//        let directoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
+//        let fileURL = URL(fileURLWithPath: fileName, relativeTo: directoryURL).appendingPathExtension("png")
+//        try? FileManager.default.removeItem(at: fileURL)
     }
     
     @IBAction private func onAddImageClick(_ sender: UIButton) {

@@ -23,9 +23,9 @@ final class StorageService {
         }
     }
     
-    var imageName: String {
+    var images: [String] {
         get {
-            storage.string(forKey: UserDefaultsConstants.IMAGE_NAME_KEY) ?? ""
+            storage.array(forKey: UserDefaultsConstants.IMAGE_NAME_KEY) as? [String] ?? [String]()
         }
         set {
             storage.set(newValue, forKey: UserDefaultsConstants.IMAGE_NAME_KEY)
@@ -35,4 +35,6 @@ final class StorageService {
     func removeObject(forKey: String) {
         storage.removeObject(forKey: forKey)
     }
+    
+    private init() { }
 }
