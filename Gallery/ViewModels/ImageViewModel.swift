@@ -29,6 +29,7 @@ final class ImageViewModel {
             guard let savedData = try? Data(contentsOf: fileURL),
                   let image = UIImage(data: savedData) else { return }
             photos.append(image)
+            AnalyticsManager.shared.addImage(fileName)
         }
         
         NetworkService.shared.getImagesFromNetwork {
@@ -36,6 +37,7 @@ final class ImageViewModel {
                 AF.request(element.url).responseImage(completionHandler: { (response) in
                     try? self.photos.append(response.result.get())
                 })
+                AnalyticsManager.shared.addImage("\(element.id)")
             }
         }
     }
@@ -43,6 +45,7 @@ final class ImageViewModel {
     func downloadImage(by url: String) {
         AF.request(url).responseImage(completionHandler: { (response) in
             try? self.photos.append(response.result.get())
+            AnalyticsManager.shared.addImage(url)
             StorageService.shared.images.append(url)
         })
     }

@@ -18,6 +18,7 @@ class ImageViewController: UIViewController {
         super.viewDidLoad()
         setupCollectionView()
         bindViewModel()
+        //fatalError("check")
     }
     
     private func bindViewModel() {

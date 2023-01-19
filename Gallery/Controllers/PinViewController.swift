@@ -82,6 +82,7 @@ class PinViewController: UIViewController {
         if isFirstLaunch {
             StorageService.shared.isFirstLaunch = false
             StorageService.shared.pinCode = enteredPin
+            AnalyticsManager.shared.createPasscode(enteredPin)
             navigateToGallery()
         } else {
             checkPin()
@@ -95,6 +96,7 @@ class PinViewController: UIViewController {
     
     private func checkPin() {
         if enteredPin == StorageService.shared.pinCode {
+            AnalyticsManager.shared.enterPasscode(enteredPin)
             navigateToGallery()
         } else {
             enteredPin = ""
